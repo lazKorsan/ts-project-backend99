@@ -1,0 +1,18 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="selenium" />
+          <option value="robotframework" />
+          <option value="robotframework-seleniumlibrary" />
+          <option value="fixture" />
+          <option value="pandas" />
+          <option value="behave-html-formatter" />
+          <option value="allure-behave" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

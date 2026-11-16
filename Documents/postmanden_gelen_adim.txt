@@ -1,0 +1,66 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Given(/^Mars kullanicisi ID listesini consola yazdirir$/, async function () {
+
+    const axios = require('axios');
+
+    async function getBlogs() {
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'https://qa.instulearn.com/api/blogs',
+            headers: {
+                'Accept': 'application/json',
+                'x-api-key': '1234'
+            }
+        };
+
+        try {
+            const response = await axios.request(config);
+            return response.data; // Testlerinizde doğrulamak (assert) için veriyi dönüyoruz
+        } catch (error) {
+            console.error("API İsteği Sırasında Hata Oluştu:", error);
+            throw error; // Hatanın testi fail etmesi için yukarı fırlatıyoruz
+        }
+    }
+
+    module.exports = { getBlogs };
+
+
+
+});
+
+
+Given(/^Mars kullanicisi ID listesini consola yazdirir$/, async function () {
+
+    // 1. Bir önceki adımda 'this.response' içerisine kaydettiğimiz yanıtı alıyoruz
+    const responseData = this.response?.data;
+
+    // 2. Eğer dönen veri bir dizi (array) ise veya datanın içinde bir array varsa ID'leri mapliyoruz
+    // Not: API yanıtınızın yapısına göre (örn: responseData.blogs veya direkt responseData) değiştirebilirsiniz
+    if (responseData && Array.isArray(responseData)) {
+        const idList = responseData.map((blog: any) => blog.id);
+        console.log("🆔 Çekilen Blog ID Listesi:", idList);
+    } else if (responseData && responseData.data && Array.isArray(responseData.data)) {
+        // Eğer veri "data" isimli bir objenin altındaysa:
+        const idList = responseData.data.map((blog: any) => blog.id);
+        console.log("🆔 Çekilen Blog ID Listesi:", idList);
+    } else {
+        console.log("⚠ API'den haritalanacak uygun bir dizi verisi dönmedi veya boş geldi.");
+    }
+
+
+
+});

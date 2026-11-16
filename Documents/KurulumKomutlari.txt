@@ -1,0 +1,12 @@
+npm install typescript ts-node axios @types/node --save-dev
+
+npx tsc --init
+
+npm install --save-dev @cucumber/cucumber ts-node @types/node
+
+
+npm install dotenv
+npm install --save-dev @types/node
+
+
+npm install jsonpath-plus  --> id listelemek için gerekli eklenti.

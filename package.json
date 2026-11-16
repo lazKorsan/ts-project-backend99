@@ -1,0 +1,21 @@
+{
+  "name": "ts-project-backend99",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.3.0",
+    "@types/node": "^26.6.5",
+    "axios": "^1.21.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "private": true,
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "jsonpath-plus": "^11.2.2"
+  }
+}
