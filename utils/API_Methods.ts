@@ -1,4 +1,5 @@
 import { JSONPath } from "jsonpath-plus";
+import assert from "node:assert/strict";
 
 /**
  * Verilen JSON yanıtı içinden belirtilen path ile ID değerlerini bulur,
@@ -117,4 +118,93 @@ function extractIds(
     return result
         .map((v: any) => Number(v))
         .filter((n: number) => !isNaN(n));
+}
+
+// ==========================================
+// ASSERTION METODLARI
+// ==========================================
+
+/**
+ * Gelen değerin beklenen değere eşit olup olmadığını kontrol eder (String).
+ * @param actual Gerçek değer
+ * @param expected Beklenen değer
+ * @param message Hata durumunda ekrana yazılacak özel mesaj (opsiyonel)
+ */
+export function assertString(actual: any, expected: string, message?: string) {
+    try {
+        // Gelen değer null/undefined değilse string'e çevirip karşılaştırıyoruz
+        const actualStr = actual !== undefined && actual !== null ? String(actual) : actual;
+        assert.strictEqual(actualStr, expected);
+        console.log(`✅ [ASSERT PASS] String eşleşti: "${actualStr}"`);
+    } catch (error: any) {
+        console.error(`❌ [ASSERT FAIL] String eşleşmedi! Beklenen: "${expected}", Gelen: "${actual}"`);
+        throw new Error(message || `String doğrulama hatası: Beklenen "${expected}", Gelen "${actual}"`);
+    }
+}
+
+/**
+ * Gelen değerin beklenen değere eşit olup olmadığını kontrol eder (Number).
+ * @param actual Gerçek değer
+ * @param expected Beklenen değer
+ * @param message Hata durumunda ekrana yazılacak özel mesaj (opsiyonel)
+ */
+export function assertNumber(actual: any, expected: number, message?: string) {
+    try {
+        // Gelen değer string ise number'a çeviriyoruz, değilse olduğu gibi alıyoruz
+        const actualNum = typeof actual === 'string' ? Number(actual) : actual;
+        assert.strictEqual(actualNum, expected);
+        console.log(`✅ [ASSERT PASS] Number eşleşti: ${actualNum}`);
+    } catch (error: any) {
+        console.error(`❌ [ASSERT FAIL] Number eşleşmedi! Beklenen: ${expected}, Gelen: ${actual}`);
+        throw new Error(message || `Number doğrulama hatası: Beklenen ${expected}, Gelen ${actual}`);
+    }
+}
+
+/**
+ * HTTP Status Code'un beklenen koda eşit olup olmadığını kontrol eder.
+ * @param actualStatus Gerçek status kodu (örn: response.status)
+ * @param expectedStatus Beklenen status kodu (örn: 200)
+ */
+export function assertStatusCode(actualStatus: number, expectedStatus: number) {
+    try {
+        assert.strictEqual(actualStatus, expectedStatus);
+        console.log(`✅ [ASSERT PASS] Status Code doğru: ${actualStatus}`);
+    } catch (error: any) {
+        console.error(`❌ [ASSERT FAIL] Status Code hatalı! Beklenen: ${expectedStatus}, Gelen: ${actualStatus}`);
+        throw new Error(`Status Code doğrulama hatası: Beklenen ${expectedStatus}, Gelen ${actualStatus}`);
+    }
+}
+
+/**
+ * Gelen değerin "true" veya "false" olup olmadığını kontrol eder (Boolean).
+ * @param actual Gerçek değer
+ * @param expected Beklenen boolean değer
+ */
+export function assertBoolean(actual: any, expected: boolean) {
+    try {
+        const actualBool = typeof actual === 'string' ? actual.toLowerCase() === 'true' : Boolean(actual);
+        assert.strictEqual(actualBool, expected);
+        console.log(`✅ [ASSERT PASS] Boolean eşleşti: ${actualBool}`);
+    } catch (error: any) {
+        console.error(`❌ [ASSERT FAIL] Boolean eşleşmedi! Beklenen: ${expected}, Gelen: ${actual}`);
+        throw new Error(`Boolean doğrulama hatası: Beklenen ${expected}, Gelen ${actual}`);
+    }
+}
+
+/**
+ * JSON yanıtı içindeki belirli bir key'in değerini kontrol eder.
+ * @param responseData Ham JSON verisi (örn: this.response.data)
+ * @param key Kontrol edilecek alan adı (örn: "remark", "status")
+ * @param expectedValue Beklenen değer
+ */
+export function assertJsonKeyValue(responseData: any, key: string, expectedValue: any) {
+    try {
+        const actualValue = responseData?.[key];
+        assert.equal(actualValue, expectedValue);
+        console.log(`✅ [ASSERT PASS] JSON Key "${key}" doğru: ${actualValue}`);
+    } catch (error: any) {
+        const actualValue = responseData?.[key];
+        console.error(`❌ [ASSERT FAIL] JSON Key "${key}" hatalı! Beklenen: ${expectedValue}, Gelen: ${actualValue}`);
+        throw new Error(`JSON Key doğrulama hatası: "${key}" için beklenen ${expectedValue}, gelen ${actualValue}`);
+    }
 }

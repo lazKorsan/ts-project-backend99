@@ -1,6 +1,7 @@
 import {Given} from "@cucumber/cucumber";
 import {apiSpec, setUpApi} from "../support/hooks";
 import assert from "node:assert/strict";
+import {assertJsonKeyValue, assertStatusCode} from "../../utils/API_Methods";
 
 const {JSONPath} = require('jsonpath-plus');
 
@@ -77,11 +78,11 @@ Given(/^PricePlans kullanicisi "([^"]*)" jsonPathExpression degeri ile nonExtens
 });
 
 Given(/^PricePlans kullanicisi status code degerinin (\d+) oldugunu dogrular$/, async function (statusCode: number) {
-    assert.equal(this.response.status, Number(statusCode));
+    assertStatusCode(this.response.status, Number(statusCode));
 });
 
 Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin "([^"]*)" oldugunu dogrular$/, async function (key: string, expectedValue: string) {
-    assert.equal(this.response.data?.[key], expectedValue);
+    assertJsonKeyValue(this.response.data, key, expectedValue);
 });
 
 Given('PricePlans kullanicisi sorgu sonucunu kayt eder', function () {
