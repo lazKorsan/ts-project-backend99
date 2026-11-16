@@ -13,7 +13,21 @@ Given(/^PricePlans kullanicisi "([^"]*)" token ile baseUrl olusturur$/, async fu
 });
 
 Given(/^PricePlans kullanicisi "([^"]*)" path parametrelerini olusturur$/, function (path: string) {
-    pathParam = path.startsWith('/') ? path : `/${path}`;
+    // Gelen path içindeki {placeholder} ifadelerini this'teki değerlerle değiştiriyoruz
+    let resolvedPath = path
+        .replace(/{minID}/g, String(this.minID))
+        .replace(/{maxID}/g, String(this.maxID))
+        .replace(/{nonExtensionsID}/g, String(this.nonExistingID));
+    // Not: Yukarıdaki adımda nonExtension değerini this.nonExistingID olarak kaydetmiştik.
+
+    // Eğer değişkenlerden biri henüz set edilmemişse (undefined), hata vermesini engellemek için kontrol edebiliriz
+    if (resolvedPath.includes('undefined')) {
+        throw new Error(`❌ HATA: Path içindeki placeholder değeri bulunamadı! Lütfen önceki adımların çalıştığından emin olun. Gelen Path: ${path}`);
+    }
+
+    // Başına '/' ekleme kontrolü
+    pathParam = resolvedPath.startsWith('/') ? resolvedPath : `/${resolvedPath}`;
+
     console.log(`📌 Oluşturulan Path Parametresi: ${pathParam}`);
 });
 
@@ -87,4 +101,16 @@ Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin "([^"]*)" oldugunu dogrular$
 
 Given('PricePlans kullanicisi sorgu sonucunu kayt eder', function () {
     console.dir(response.data, {depth: null, colors: true});
+});
+Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin (\d+) oldugunu dogrular$/,async function (key: string, expectedValue: string) {
+    assertJsonKeyValue(this.response.data, key, expectedValue);
+});
+Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin \(null\) oldugunu dogrula$/, async function (key: string) {
+    const { JSONPath } = require('jsonpath-plus');
+
+    const result = JSONPath({ path: `$.${key}`, json: this.response.data, resultType: "value" });
+    const actualValue = result.length > 0 ? result[0] : undefined;
+
+    assert.strictEqual(actualValue, null, `Beklenen null, gelen: ${actualValue}`);
+    console.log(`✅ [ASSERT PASS] JSON Key "${key}" başarıyla null olarak doğrulandı.`);
 });

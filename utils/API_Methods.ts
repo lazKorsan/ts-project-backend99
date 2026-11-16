@@ -191,19 +191,27 @@ export function assertBoolean(actual: any, expected: boolean) {
     }
 }
 
-/**
- * JSON yanıtı içindeki belirli bir key'in değerini kontrol eder.
- * @param responseData Ham JSON verisi (örn: this.response.data)
- * @param key Kontrol edilecek alan adı (örn: "remark", "status")
- * @param expectedValue Beklenen değer
- */
 export function assertJsonKeyValue(responseData: any, key: string, expectedValue: any) {
     try {
-        const actualValue = responseData?.[key];
-        assert.equal(actualValue, expectedValue);
-        console.log(`✅ [ASSERT PASS] JSON Key "${key}" doğru: ${actualValue}`);
+        const result = (JSONPath as any)({
+            path: `$.${key}`,
+            json: responseData,
+            resultType: "value"
+        }) as any[];
+
+        const actualValue = result.length > 0 ? result[0] : undefined;
+
+        // Eğer Feature'dan "null" (string) gelirse, bunu gerçek null'a çevirelim
+        const expected = expectedValue === "null" ? null : expectedValue;
+
+        // Hem tip hem değer olarak eşit mi kontrol et (strictEqual kullanıyoruz)
+        assert.strictEqual(actualValue, expected);
+
+        console.log(`✅ [ASSERT PASS] JSON Key "${key}" doğru: ${actualValue === null ? 'null' : actualValue}`);
     } catch (error: any) {
-        const actualValue = responseData?.[key];
+        const result = (JSONPath as any)({ path: `$.${key}`, json: responseData, resultType: "value" }) as any[];
+        const actualValue = result.length > 0 ? result[0] : undefined;
+
         console.error(`❌ [ASSERT FAIL] JSON Key "${key}" hatalı! Beklenen: ${expectedValue}, Gelen: ${actualValue}`);
         throw new Error(`JSON Key doğrulama hatası: "${key}" için beklenen ${expectedValue}, gelen ${actualValue}`);
     }

@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 
 // Çalıştırmak istediğin tag'i buraya yazabilirsin
 // İstersen boş bırakıp tüm testleri çalıştırabilirsin
-const tagName = '@US011TC01_ATIN_get';
+const tagName = '@US011TC02_ATID_get';
 
 // CMD'de çalışacak olan komut
 // Windows kullandığın için tırnak işaretlerine (escape) dikkat ediyoruz
