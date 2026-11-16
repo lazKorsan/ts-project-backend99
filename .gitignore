@@ -9,3 +9,16 @@ yarn-error.log*
 .pnp.js
 
 .vscode/*
+
+###İDEA#
+.idea
+
+###Documents###
+Documents
+
+###REPORTS###
+reports
+
+###env###
+.env
+
