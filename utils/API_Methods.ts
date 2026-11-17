@@ -216,3 +216,34 @@ export function assertJsonKeyValue(responseData: any, key: string, expectedValue
         throw new Error(`JSON Key doğrulama hatası: "${key}" için beklenen ${expectedValue}, gelen ${actualValue}`);
     }
 }
+
+/**
+ * JSON yanıtı içinden belirli bir key'in değerini çeker ve döner (Doğrulama yapmaz).
+ * Boşluklu key'leri ("Added Price Plans ID" gibi) destekler.
+ * İlerideki adımlarda kullanılmak üzere (örn: Delete işlemi) değer almak için kullanılır.
+ *
+ * @param responseData Ham JSON verisi (örn: this.response.data)
+ * @param key Aranacak anahtar (örn: "Added Price Plans ID")
+ * @returns Bulunan değer (number, string vb.) veya undefined
+ */
+export function extractJsonValue(responseData: any, key: string): any {
+    if (!responseData) return undefined;
+
+    // Eğer direkt key varsa dön (örn: responseData["Added Price Plans ID"])
+    if (responseData[key] !== undefined) {
+        return responseData[key];
+    }
+
+    // Eğer nested bir key ise (örn: "data.id") JSONPath ile bul
+    try {
+        const result = (JSONPath as any)({
+            path: `$.${key}`,
+            json: responseData,
+            resultType: "value"
+        }) as any[];
+
+        return result.length > 0 ? result[0] : undefined;
+    } catch (e) {
+        return undefined;
+    }
+}
