@@ -1,7 +1,10 @@
 import {Given} from "@cucumber/cucumber";
 import {apiSpec, setUpApi} from "../support/hooks";
 import assert from "node:assert/strict";
-import {assertJsonKeyValue, assertStatusCode} from "../../utils/API_Methods";
+import {assertJsonKeyValue, assertStatusCode, extractJsonValue} from "../../utils/API_Methods";
+import {PricePlansTestData} from "../../utils/PricePlansTestData";
+import path = require("node:path");
+
 
 const {JSONPath} = require('jsonpath-plus');
 
@@ -17,7 +20,8 @@ Given(/^PricePlans kullanicisi "([^"]*)" path parametrelerini olusturur$/, funct
     let resolvedPath = path
         .replace(/{minID}/g, String(this.minID))
         .replace(/{maxID}/g, String(this.maxID))
-        .replace(/{nonExtensionsID}/g, String(this.nonExistingID));
+        .replace(/{nonExtensionsID}/g, String(this.nonExistingID))
+        .replace(/{addedPricePlanId}/g, String(this.addedPricePlanId)); //
     // Not: Yukarıdaki adımda nonExtension değerini this.nonExistingID olarak kaydetmiştik.
 
     // Eğer değişkenlerden biri henüz set edilmemişse (undefined), hata vermesini engellemek için kontrol edebiliriz
@@ -102,15 +106,67 @@ Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin "([^"]*)" oldugunu dogrular$
 Given('PricePlans kullanicisi sorgu sonucunu kayt eder', function () {
     console.dir(response.data, {depth: null, colors: true});
 });
-Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin (\d+) oldugunu dogrular$/,async function (key: string, expectedValue: string) {
+Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin (\d+) oldugunu dogrular$/, async function (key: string, expectedValue: string) {
     assertJsonKeyValue(this.response.data, key, expectedValue);
 });
 Given(/^PricePlans kullanicisi "([^"]*)" bilgisinin \(null\) oldugunu dogrula$/, async function (key: string) {
-    const { JSONPath } = require('jsonpath-plus');
+    const {JSONPath} = require('jsonpath-plus');
 
-    const result = JSONPath({ path: `$.${key}`, json: this.response.data, resultType: "value" });
+    const result = JSONPath({path: `$.${key}`, json: this.response.data, resultType: "value"});
     const actualValue = result.length > 0 ? result[0] : undefined;
 
     assert.strictEqual(actualValue, null, `Beklenen null, gelen: ${actualValue}`);
     console.log(`✅ [ASSERT PASS] JSON Key "${key}" başarıyla null olarak doğrulandı.`);
+});
+Given(/^PricePlans kullanicisi "([^"]*)" parametrelerine gecerli veri ile POST sorgusu gonderir$/, async function (path: string) {
+
+    const url = path.startsWith('/') ? path : `/${path}`;
+
+    try {
+        const payload = PricePlansTestData.validBody;
+        const response = await apiSpec.post(url, payload);
+        console.dir(response.data, {depth: null, colors: true});
+        this.response = response;
+
+        console.log(`✅ POST İsteği Başarılı | Status Code: ${response.status}`);
+    } catch (error: any) {
+        this.response = error.response;
+        console.error(`❌ POST İsteği Hata Aldı | Status Code: ${this.response?.status}`);
+
+    }
+});
+Given(/^PricePlans kullanicisi "([^"]*)" degerini konsola yazdırır$/, async function (key: string) {
+
+    // Artık extractJsonValue methodunu çağırıyoruz
+    const value = extractJsonValue(this.response.data, key);
+
+    if (value === undefined) {
+        throw new Error(`❌ HATA: "${key}" anahtarı yanıtta bulunamadı! Yanıt: ${JSON.stringify(this.response.data)}`);
+    }
+
+    console.log(`📌 ${key}: ${value}`);
+
+    if (key.toLowerCase().includes("id")) {
+        this.addedPricePlanId = value;
+        console.log(`💾 Hafızaya kaydedildi -> this.addedPricePlanId = ${value}`);
+    }
+
+});
+Given(/^PricePlans kullanicisi "([^"]*)" parametrelerine bos bir POST sorgusu gonderir$/, async function (path: string) {
+
+    const url = path.startsWith('/') ? path : `/${path}`;
+
+    try {
+        const payload = PricePlansTestData.emptyBody;
+        const response = await apiSpec.post(url, payload);
+        console.dir(response.data, {depth: null, colors: true});
+        this.response = response;
+
+        console.log(`✅ POST İsteği Başarılı | Status Code: ${response.status}`);
+    } catch (error: any) {
+        this.response = error.response;
+        console.error(`❌ POST İsteği Hata Aldı | Status Code: ${this.response?.status}`);
+
+    }
+
 });
