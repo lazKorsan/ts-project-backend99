@@ -170,3 +170,72 @@ Given(/^PricePlans kullanicisi "([^"]*)" parametrelerine bos bir POST sorgusu go
     }
 
 });
+Given(/^PricePlans kullanicisi "([^"]*)" degerinin "([^"]*)" degerine esit oldugunu dogrular$/, async function (actualKey: string, expectedKey: string) {
+
+    // 1. Hafızadaki değişkenleri bir sözlük (dictionary) ile eşleştirelim
+    // İleride başka değişkenler eklemek istersen buraya ekleyebilirsin.
+    const memoryVariables: Record<string, any> = {
+        "Added Price Plans ID": this.addedPricePlanId,
+        "Updated Price Plans ID": this.updatedPricePlansID,
+        "maxID": this.maxID,
+        "minID": this.minID,
+        "nonExtensionsID": this.nonExistingID
+    };
+
+    // 2. Feature'dan gelen key isimlerine göre gerçek değerleri alıyoruz
+    const actualValue = memoryVariables[actualKey];
+    const expectedValue = memoryVariables[expectedKey];
+
+    // 3. Değerlerin hafızada olup olmadığını kontrol edelim (undefined hatasını önlemek için)
+    if (actualValue === undefined) {
+        throw new Error(`❌ HATA: "${actualKey}" değeri hafızada bulunamadı! Lütfen önceki adımların çalıştığından emin olun.`);
+    }
+    if (expectedValue === undefined) {
+        throw new Error(`❌ HATA: "${expectedKey}" değeri hafızada bulunamadı! Lütfen önceki adımların çalıştığından emin olun.`);
+    }
+
+    // 4. Karşılaştırmayı yap (Tipleri number'a çevirerek yapıyoruz ki string/number uyuşmazlığı olmasın)
+    assert.strictEqual(
+        Number(actualValue),
+        Number(expectedValue),
+        `❌ HATA: "${actualKey}" (${actualValue}) ile "${expectedKey}" (${expectedValue}) eşleşmiyor!`
+    );
+
+    console.log(`✅ [ASSERT PASS] "${actualKey}" (${actualValue}) değeri, "${expectedKey}" (${expectedValue}) değerine eşit.`);
+});
+Given(/^PricePlans kullanicisi "([^"]*)" parametreleri ve dogru bilgilerle PATCH sorgusu gonderir$/, async function (path: string) {
+
+    // Gelen path içindeki {placeholder} ifadelerini this'teki değerlerle değiştiriyoruz
+    let resolvedPath = path
+        .replace(/{minID}/g, String(this.minID))
+        .replace(/{maxID}/g, String(this.maxID))
+        .replace(/{nonExtensionsID}/g, String(this.nonExistingID))
+        .replace(/{addedPricePlanId}/g, String(this.addedPricePlanId)); //
+    // Not: Yukarıdaki adımda nonExtension değerini this.nonExistingID olarak kaydetmiştik.
+
+    // Eğer değişkenlerden biri henüz set edilmemişse (undefined), hata vermesini engellemek için kontrol edebiliriz
+    if (resolvedPath.includes('undefined')) {
+        throw new Error(`❌ HATA: Path içindeki placeholder değeri bulunamadı! Lütfen önceki adımların çalıştığından emin olun. Gelen Path: ${path}`);
+    }
+
+    // Başına '/' ekleme kontrolü
+    pathParam = resolvedPath.startsWith('/') ? resolvedPath : `/${resolvedPath}`;
+
+    console.log(`📌 Oluşturulan Path Parametresi: ${pathParam}`);
+
+
+
+    try {
+        const payload = PricePlansTestData.updatedBody;
+        const response = await apiSpec.patch(resolvedPath, payload);
+        console.dir(response.data, {depth: null, colors: true});
+        this.response = response;
+
+        console.log(`✅ PATCH İsteği Başarılı | Status Code: ${response.status}`);
+    } catch (error: any) {
+        this.response = error.response;
+        console.error(`❌ PATCH İsteği Hata Aldı | Status Code: ${this.response?.status}`);
+
+    }
+
+});
