@@ -11,10 +11,16 @@ Feature: Bir yönetici olarak API bağlantısı üzerinden yeni bir course price
     * PricePlans kullanicisi "remark" bilgisinin "success" oldugunu dogrular
     * PricePlans kullanicisi "Message" bilgisinin "Successfully Added." oldugunu dogrular
     * PricePlans kullanicisi "Added Price Plans ID" degerini konsola yazdırır
-    * PricePlans kullanicisi "api/pricePlan/{addedPricePlanId}" path parametrelerini olusturur
+    * PricePlans kullanicisi "api/pricePlans" path parametrelerini olusturur
     * PricePlans kullanicisi GET sorgusu gonderir ve yaniti kayt eder
+    * PricePlans kullanicisi "data.id" jsonPathExpression degeri ile maxID degerini consola yazdirir
+    * PricePlans kullanicisi "api/pricePlan/{maxID}" path parametrelerini olusturur
+    * PricePlans kullanicisi GET sorgusu gonderir ve yaniti kayt eder
+    * PricePlans kullanicisi sorgu sonucunu kayt eder
     * PricePlans kullanicisi status code degerinin 200 oldugunu dogrular
     * PricePlans kullanicisi "remark" bilgisinin "success" oldugunu dogrular
+    * PricePlans kullanicisi "maxID" degerinin "Added Price Plans ID" degerine esit oldugunu dogrular
+
 
 
 

@@ -2,7 +2,7 @@
 Feature: Bir yönetici olarak API baglantisi üzerinden belirtilen id numarasına sahip course price plan'in bilgilerini güncelleyebilmek istiyorum.
 
   @US014TC01_ATBTIT_post_patch
-  Scenario: Pozitive -> POST, PATCH  [ADMIN=TRUE],[BODY=TRUE],[ID=DYNAMIC],[webinar_id=true]
+  Scenario: Pozitive -> post,PATCH  [ADMIN=TRUE],[BODY=TRUE],[ID=DYNAMIC],[webinar_id=true]
   /api/updatePricePlan/{id} endpoint'ine
   gecerli authorization bilgileri ile
   dogru (id) ve dogru datalar (title, dateRange, discount, capacity, webinar_id) iceren bir

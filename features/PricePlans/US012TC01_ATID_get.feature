@@ -1,7 +1,7 @@
 @PricePlans
   Feature: Bir yönetici olarak API baglantisi üzerinden belirtilen id numarasına sahip course price plan'in detaylı bilgilerine erisebilmeliyim.
     @US012TC01_ATID_get
-    Scenario: Pozitive -> GET [ADMIN=TRUE],[ID=DYNAMIC]
+    Scenario: Pozitive -> get,GET [ADMIN=TRUE],[ID=DYNAMIC]
     /api/pricePlan/{id} endpoint'ine gecerli
     authorization bilgileri ve dogru data (id) iceren bir
     GET request gönderildiginde

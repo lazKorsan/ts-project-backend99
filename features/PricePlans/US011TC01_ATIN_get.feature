@@ -2,7 +2,8 @@
 Feature: Bir yönetici olarak API bağlantısı üzerinden course price plans'e erişebilmek istiyorum.
 
   @US011TC01_ATIN_get
-  Scenario: /api/pricePlans endpoint'ine gecerli authorization bilgileri ile
+  Scenario: Pozitive -> GET [ADMIN=TRUE],[ID=NONE]
+  /api/pricePlans endpoint'ine gecerli authorization bilgileri ile
   bir GET request gönderildiginde
   dönen status code'in 200 ve
   response body'deki remark bilgisinin "success" oldugu dogrulanmali.

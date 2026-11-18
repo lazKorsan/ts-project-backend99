@@ -16,4 +16,4 @@ Feature: Bir yönetici olarak API bağlantısı üzerinden yeni bir course price
     * PricePlans kullanicisi "Added Price Plans ID" degerini konsola yazdırır
     * PricePlans kullanicisi "Added Price Plans Title" bilgisinin "Test Price Plans" oldugunu dogrular
 
-    #{addedPricePlanId}
+
