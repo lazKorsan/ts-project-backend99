@@ -248,3 +248,15 @@ Given(/^PricePlans kullanicisi "([^"]*)" degerinin "([^"]*)" degerine esit oldug
 
     console.log(`✅ [ASSERT PASS] "${actualKey}" (${actualValue}) değeri, "${expectedKey}" (${expectedValue}) değerine eşit.`);
 });
+Given(/^PricePlans kullanicisi DELETE sorgusu gonderir ve yaniti kayt eder$/, async function () {
+
+    try {
+        response = await apiSpec.delete(pathParam);
+        this.response = response;
+        console.log(`✅ DELETE İsteği Başarılı | Status Code: ${response.status}`);
+    } catch (error: any) {
+        response = error.response;
+        this.response = response;
+        console.error(`❌ DELETE İsteği Hata Aldı | Status Code: ${response?.status}`);
+    }
+});
