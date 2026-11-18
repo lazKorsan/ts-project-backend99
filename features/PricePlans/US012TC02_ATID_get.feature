@@ -1,7 +1,7 @@
 @PricePlans
   Feature: Bir yönetici olarak API baglantisi üzerinden belirtilen id numarasına sahip course price plan'in detaylı bilgilerine erisebilmeliyim.
     @US012TC02_ATID_get
-    Scenario: Pozitive -> GET [ADMIN=TRUE],[ID=DYNAMIC]
+    Scenario: Pozitive -> get,GET [ADMIN=TRUE],[ID=DYNAMIC]
     Response body icindeki list datalarının
     (id, creator_id, webinar_id, bundle_id, start_date, end_date, discount, capacity, order,
     created_at, updated_at, deleted_at, title, id, ticket_id, locale, title) içerikleri doğrulanmali.

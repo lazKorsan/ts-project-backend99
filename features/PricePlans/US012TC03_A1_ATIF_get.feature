@@ -1,7 +1,7 @@
 @PricePlans
   Feature: Bir yönetici olarak API baglantisi üzerinden belirtilen id numarasına sahip course price plan'in detaylı bilgilerine erisebilmeliyim.
     @US012TC03_A1_ATIF_get
-    Scenario: Negative ->GET [ADMIN=TRUE],[ID=FALSE]
+    Scenario: Negative -> get,GET [ADMIN=TRUE],[ID=FALSE]
     /api/pricePlan/{id} endpoint'ine gecerli authorization bilgileri ve
     kaydı olmayan bir (id) iceren bir GET request gönderildiginde
     dönen status code'in 203,

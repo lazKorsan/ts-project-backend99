@@ -2,7 +2,7 @@
 Feature: Bir yönetici olarak API baglantisi üzerinden belirtilen id numarasına sahip course price plan'in detaylı bilgilerine erisebilmeliyim.
 
   @US012TC04_AFIT_get
-  Scenario: Negative -> [ADMIN=FALSE],[ID=TRUE]
+  Scenario: Negative -> GET [ADMIN=FALSE],[ID=TRUE]
   /api/pricePlan/{id} endpoint'ine gecersiz (invalid token) authorization bilgileri ve
   dogru data (id) iceren bir GET request gönderildiginde
   dönen status code'in 401 ve

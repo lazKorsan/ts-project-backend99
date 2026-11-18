@@ -1,7 +1,8 @@
 @PricePlans
   Feature: Bir yönetici olarak API bağlantısı üzerinden course price plans'e erişebilmek istiyorum.
     @US011TC02_ATID_get
-    Scenario: id(x) olaninin response body'de donen bilgileri
+    Scenario: Pozitive -> get,GET [ADMIN=TRUE],[ID=DYNAMIC]
+    id(x) olaninin response body'de donen bilgileri
     (creator_id, webinar_id, bundle_id, start_date, end_date, discount, capacity,
     order, created_at, updated_at, deleted_at, title, id, ticket_id, locale, title) doğrulanmalı.
       * PricePlans kullanicisi "admin" token ile baseUrl olusturur

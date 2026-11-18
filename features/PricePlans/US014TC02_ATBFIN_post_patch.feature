@@ -2,7 +2,7 @@
 Feature: Bir yönetici olarak API baglantisi üzerinden belirtilen id numarasına sahip course price plan'in bilgilerini güncelleyebilmek istiyorum.
 
   @US014TC02_ATBFIN_post_patch
-  Scenario: Negative ->POST,PATCH [ADMIN=TRUE],[BODY=FALSE],[ID=DYNAMIC]
+  Scenario: Negative ->post,PATCH [ADMIN=TRUE],[BODY=FALSE],[ID=DYNAMIC]
   /api/updatePricePlan/{id} endpoint'ine
   gecerli authorization bilgileri ile
   dogru (id) ve data icermeyen bir PATCH request gönderildiginde
