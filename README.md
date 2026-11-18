@@ -1,15 +1,10 @@
+# Proje Kurulum ve Bağımlılık Rehberi
 
-projedeki bağımlıkları listelemeklik
-npm list
+Bu proje, TypeScript ve Cucumber kullanılarak geliştirilmiş bir API test otomasyon projesidir.
 
-+-- @cucumber/cucumber@13.3.0
-+-- @types/node@26.6.5
-+-- axios@1.21.0
-+-- dotenv@18.0.9
-+-- jsonpath-plus@11.2.2
-+-- ts-node@10.9.2
-`-- typescript@5.9.3
+## 1. Projeyi İndirdikten Sonra Çalıştırılacak Komut
 
-projeyi kullanladıktan sonra calistiirlacak komut
+Projeyi bilgisayarına indirdikten sonra, terminali projenin kök dizininde (package.json dosyasının olduğu yerde) açın ve ana bağımlılıkları kurmak için aşağıdaki komutu çalıştırın:
 
+```bash
 npm install @cucumber/cucumber@13.3.0 axios@1.21.0 dotenv@18.0.9 jsonpath-plus@11.2.2
